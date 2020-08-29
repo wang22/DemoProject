@@ -1,9 +1,13 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"github.com/beevik/etree"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"io/ioutil"
+	"strings"
 	"tilemap/core"
 )
 
@@ -41,21 +45,21 @@ func ReadLevelFile(filePath string) *core.MapConfig {
 }
 
 func main() {
-	//dirPath := "D:\\homework\\tiledmap\\level"
-	//fileInfos, _ := ioutil.ReadDir(dirPath)
-	//var buf bytes.Buffer
-	//for _, file := range fileInfos {
-	//	if file.IsDir() || !strings.HasPrefix(file.Name(), "level") {
-	//		continue
-	//	}
-	//	filePath := dirPath + "\\" + file.Name()
-	//	mapCfg := ReadLevelFile(filePath)
-	//	jsonStr, _ := json.Marshal(mapCfg)
-	//	buf.WriteString(string(jsonStr))
-	//	buf.WriteString(",")
-	//}
-	//jsonArr := "[" + buf.String()[0:len(buf.String()) - 1] + "]"
-	//ioutil.WriteFile("./static/level.json", []byte(jsonArr), 0677)
+	dirPath := "./tiledmap"
+	fileInfos, _ := ioutil.ReadDir(dirPath)
+	var buf bytes.Buffer
+	for _, file := range fileInfos {
+		if file.IsDir() || !strings.HasPrefix(file.Name(), "level") {
+			continue
+		}
+		filePath := dirPath + "/" + file.Name()
+		mapCfg := ReadLevelFile(filePath)
+		jsonStr, _ := json.Marshal(mapCfg)
+		buf.WriteString(string(jsonStr))
+		buf.WriteString(",")
+	}
+	jsonArr := "[" + buf.String()[0:len(buf.String()) - 1] + "]"
+	ioutil.WriteFile("./static/level.json", []byte(jsonArr), 0677)
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
