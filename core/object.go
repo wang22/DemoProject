@@ -30,8 +30,9 @@ func (pos *Object) ReadData(layerData string) {
 		}
 		cols := strings.Split(line, ",")
 		//var colArr []bool
-		x := 0
+		x := -1
 		for _, col := range cols {
+			x++
 			if strings.TrimSpace(col) == "" || col == "0" {
 				continue
 			}
@@ -47,7 +48,6 @@ func (pos *Object) ReadData(layerData string) {
 			if y < pos.minY {
 				pos.minY = y
 			}
-			x++
 		}
 		y++
 	}

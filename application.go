@@ -38,7 +38,25 @@ func ReadLevelFile(filePath string) *core.MapConfig {
 		obj := core.NewObject()
 		obj.Name = name
 		obj.ReadData(layer.SelectElement("data").Text())
-		mapCfg.Objects = append(mapCfg.Objects, obj)
+		if name == "obstacle" {
+			obstacle := core.Obstacle{
+				Object: obj,
+				Type:   "",
+			}
+			if hasProps := layer.SelectElement("properties"); hasProps != nil {
+				props:=hasProps.SelectElements("property")
+				for _, prop:=range props {
+					name  := prop.SelectAttr("name").Value
+					if name == "type" {
+						value := prop.SelectAttr("value").Value
+						obstacle.Type = value
+					}
+				}
+			}
+			mapCfg.Objects = append(mapCfg.Objects, obstacle)
+		} else {
+			mapCfg.Objects = append(mapCfg.Objects, obj)
+		}
 	}
 
 	return mapCfg
