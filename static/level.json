@@ -1,1 +1,1 @@
-[{"name":"level1","objects":[{"name":"ground","width":598,"height":96,"x":0,"y":0},{"name":"player","width":25,"height":28,"x":0,"y":96},{"name":"obstacle","width":38,"height":38,"x":349,"y":96,"type":"saw"}]}]
+[{"name":"level1","objects":[{"name":"ground","width":598,"height":96,"x":0,"y":0},{"name":"player","width":25,"height":28,"x":0,"y":96},{"name":"obstacle","width":38,"height":38,"x":349,"y":96,"type":"saw"},{"name":"obstacle","width":43,"height":43,"x":174,"y":96,"type":"spike-head"}]}]
