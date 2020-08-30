@@ -38,25 +38,50 @@ func ReadLevelFile(filePath string) *core.MapConfig {
 		obj := core.NewObject()
 		obj.Name = name
 		obj.ReadData(layer.SelectElement("data").Text())
-		if name == "obstacle" {
-			obstacle := core.Obstacle{
-				Object: obj,
-				Type:   "",
+		if hasProps := layer.SelectElement("properties"); hasProps != nil {
+			props := hasProps.SelectElements("property")
+			for _, prop := range props {
+				key := prop.SelectAttr("name").Value
+				val := prop.SelectAttr("value").Value
+				obj.PutProp(key, val)
 			}
-			if hasProps := layer.SelectElement("properties"); hasProps != nil {
-				props:=hasProps.SelectElements("property")
-				for _, prop:=range props {
-					name  := prop.SelectAttr("name").Value
-					if name == "type" {
-						value := prop.SelectAttr("value").Value
-						obstacle.Type = value
-					}
-				}
-			}
-			mapCfg.Objects = append(mapCfg.Objects, obstacle)
-		} else {
-			mapCfg.Objects = append(mapCfg.Objects, obj)
 		}
+		mapCfg.Objects = append(mapCfg.Objects, obj)
+		//if name == "obstacle" {
+		//	obstacle := core.Obstacle{
+		//		Object: obj,
+		//		Type:   "",
+		//	}
+		//	if hasProps := layer.SelectElement("properties"); hasProps != nil {
+		//		props:=hasProps.SelectElements("property")
+		//		for _, prop:=range props {
+		//			name  := prop.SelectAttr("name").Value
+		//			if name == "type" {
+		//				value := prop.SelectAttr("value").Value
+		//				obstacle.Type = value
+		//			}
+		//		}
+		//	}
+		//	mapCfg.Objects = append(mapCfg.Objects, obstacle)
+		//} else if name == "item" {
+		//	item := core.Item{
+		//		Object: obj,
+		//		Type:   "",
+		//	}
+		//	if hasProps := layer.SelectElement("properties"); hasProps != nil {
+		//		props:=hasProps.SelectElements("property")
+		//		for _, prop:=range props {
+		//			name  := prop.SelectAttr("name").Value
+		//			if name == "type" {
+		//				value := prop.SelectAttr("value").Value
+		//				item.Type = value
+		//			}
+		//		}
+		//	}
+		//	mapCfg.Objects = append(mapCfg.Objects, item)
+		//} else {
+		//	mapCfg.Objects = append(mapCfg.Objects, obj)
+		//}
 	}
 
 	return mapCfg
@@ -76,7 +101,7 @@ func main() {
 		buf.WriteString(string(jsonStr))
 		buf.WriteString(",")
 	}
-	jsonArr := "[" + buf.String()[0:len(buf.String()) - 1] + "]"
+	jsonArr := "[" + buf.String()[0:len(buf.String())-1] + "]"
 	ioutil.WriteFile("./static/level.json", []byte(jsonArr), 0677)
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

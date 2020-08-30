@@ -5,15 +5,16 @@ import (
 )
 
 type Object struct {
-	Name   string `json:"name"`
-	minX   int
-	minY   int
-	maxX   int
-	maxY   int
-	Width  int `json:"width"`
-	Height int `json:"height"`
-	X      int `json:"x"`
-	Y      int `json:"y"`
+	Name       string `json:"name"`
+	minX       int
+	minY       int
+	maxX       int
+	maxY       int
+	Width      int               `json:"width"`
+	Height     int               `json:"height"`
+	X          int               `json:"x"`
+	Y          int               `json:"y"`
+	Properties map[string]string `json:"properties"`
 }
 
 func (pos *Object) Info() (minx, minY, maxX, maxY int) {
@@ -61,6 +62,13 @@ func (pos *Object) GetSize() (width, height int) {
 
 func (pos *Object) GetPosition() (x, y int) {
 	return pos.minX, pos.minY
+}
+
+func (pos *Object) PutProp(key, val string) {
+	if pos.Properties == nil {
+		pos.Properties = make(map[string]string)
+	}
+	pos.Properties[key] = val
 }
 
 func NewObject() *Object {
