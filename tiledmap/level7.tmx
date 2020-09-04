@@ -1964,6 +1964,7 @@
  </layer>
  <layer id="7" name="item" width="598" height="384">
   <properties>
+   <property name="onCollisionByPlayer" value="nextLevel"/>
    <property name="type" value="flag"/>
   </properties>
   <data encoding="csv">
